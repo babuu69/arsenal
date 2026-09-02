@@ -28,7 +28,10 @@
     font-family:var(--sans);
     background:
       radial-gradient(600px 400px at 50% -100px, var(--bg-glow), transparent 70%),
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
       var(--bg);
+    background-size: auto, 32px 32px, 32px 32px, auto;
     color:var(--text-primary);
     min-height:100vh;
     padding:48px 20px 80px;
@@ -165,7 +168,7 @@
     {
       type: "text",
       tag: "Keyless",
-      title: "Arsenal Updated Script",
+      title: "Updated Script",
       windowLabel: "script.txt",
       content: "loadstring(game:HttpGet("https://pastebin.com/raw/8ysy7ENG",true))()"
     }
