@@ -48,7 +48,6 @@
   }
   .header h1{font-size:26px;font-weight:600;margin:0 0 10px;letter-spacing:-0.01em;}
   .header p{font-size:15px;color:var(--text-secondary);margin:0;line-height:1.5;}
-
   .card{
     background:var(--card);
     border:1px solid var(--border);
@@ -56,7 +55,7 @@
     padding:28px;
     margin-bottom:20px;
   }
-  .card .tag{
+  .tag{
     display:inline-block;
     font-size:12px;
     font-family:var(--mono);
@@ -68,7 +67,6 @@
     margin-bottom:16px;
   }
   .card h2{font-size:19px;font-weight:600;margin:0 0 16px;}
-
   .terminal{
     background:var(--card-2);
     border:1px solid var(--border);
@@ -80,13 +78,11 @@
     padding:11px 14px;
     border-bottom:1px solid var(--border);
   }
-  .terminal .dot{width:10px;height:10px;border-radius:50%;}
-  .terminal .dot.r{background:#ff5f57;}
-  .terminal .dot.y{background:#febc2e;}
-  .terminal .dot.g{background:#28c840;}
-  .terminal .bar .label{
-    margin-left:8px;font-size:12px;color:var(--text-muted);font-family:var(--mono);
-  }
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot.r{background:#ff5f57;}
+  .dot.y{background:#febc2e;}
+  .dot.g{background:#28c840;}
+  .bar-label{margin-left:8px;font-size:12px;color:var(--text-muted);font-family:var(--mono);}
   .terminal .body{
     padding:18px 16px;
     font-family:var(--mono);
@@ -96,41 +92,24 @@
     white-space:pre-wrap;
     word-break:break-all;
   }
-
-  .btn-row{display:flex;gap:10px;margin-top:16px;}
-  .copy-btn, .open-btn{
-    flex:1;
+  .copy-btn{
+    width:100%;
+    margin-top:16px;
     padding:13px;
     border-radius:10px;
     border:none;
+    background:var(--text-primary);
+    color:#0a0a10;
     font-size:15px;
     font-weight:600;
     font-family:var(--sans);
     cursor:pointer;
-    text-decoration:none;
-    text-align:center;
     transition:opacity 0.15s ease, transform 0.1s ease;
   }
-  .copy-btn{
-    background:var(--text-primary);
-    color:#0a0a10;
-  }
-  .open-btn{
-    background:var(--accent-dim);
-    color:var(--accent-strong);
-    border:1px solid rgba(139,124,246,0.25);
-    display:block;
-  }
-  .copy-btn:hover, .open-btn:hover{opacity:0.9;}
-  .copy-btn:active, .open-btn:active{transform:scale(0.98);}
+  .copy-btn:hover{opacity:0.9;}
+  .copy-btn:active{transform:scale(0.98);}
   .copy-btn.copied{background:#28c840;color:#04340f;}
-
-  .footer{
-    text-align:center;
-    margin-top:36px;
-    font-size:13px;
-    color:var(--text-muted);
-  }
+  .footer{text-align:center;margin-top:36px;font-size:13px;color:var(--text-muted);}
 </style>
 </head>
 <body>
@@ -144,87 +123,41 @@
     <p>Everything below is kept current.</p>
   </div>
 
-  <div id="cards"></div>
+  <!-- ===================== CARD 1 =====================
+       To edit: change the text inside the <span>, <h2>, and <p> tags below.
+       Do NOT touch anything else.
+  ====================================================== -->
+  <div class="card">
+    <span class="tag">keyless</span>
+    <h2>updated</h2>
+    <div class="terminal">
+      <div class="bar">
+        <span class="dot r"></span>
+        <span class="dot y"></span>
+        <span class="dot g"></span>
+        <span class="bar-label">arsenal.txt</span>
+      </div>
+      <p class="body" id="c1">Replace this with your content.</p>
+    </div>
+    <button class="copy-btn" onclick="copyCard('c1', this)">Copy</button>
+  </div>
+  <!-- ================================================= -->
 
   <div class="footer">Works on every device · Copy &amp; paste</div>
 </div>
 
 <script>
-  // Edit this array. Each object is ONE independent card.
-  //
-  // For a piece of text, a note, or a quote — use "type: text" and put
-  // the text in "content". Shows a Copy button.
-  //
-  // For a link — use "type: link" and put the destination in "url".
-  // Shows an Open button that goes straight to that url.
-  //
-  // If a link ever breaks, do NOT delete the card — just change that
-  // one card's "url" to point at updated.html with the new destination
-  // built into the link, like this:
-  //   url: "updated.html?to=" + encodeURIComponent("https://new-real-site.com") + "&name=" + encodeURIComponent("Cool resource")
-  // Only that one card changes. Every other card is untouched.
-
-  const items = [
-    {
-      type: "text",
-      tag: "Keyless",
-      title: "Updated Script",
-      windowLabel: "script.txt",
-      content: "loadstring(game:HttpGet("https://pastebin.com/raw/8ysy7ENG",true))()"
-    }
-  ];
-
-  const container = document.getElementById('cards');
-
-  items.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    if (item.type === "link") {
-      card.innerHTML = `
-        <span class="tag">${item.tag}</span>
-        <h2>${item.title}</h2>
-        <div class="terminal">
-          <div class="bar">
-            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-            <span class="label">${item.windowLabel}</span>
-          </div>
-          <div class="body">${item.url}</div>
-        </div>
-        <a class="open-btn" href="${item.url}" target="_blank" rel="noopener">Open link</a>
-      `;
-    } else {
-      card.innerHTML = `
-        <span class="tag">${item.tag}</span>
-        <h2>${item.title}</h2>
-        <div class="terminal">
-          <div class="bar">
-            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-            <span class="label">${item.windowLabel}</span>
-          </div>
-          <div class="body">${item.content}</div>
-        </div>
-        <button class="copy-btn" data-index="${i}">Copy</button>
-      `;
-    }
-
-    container.appendChild(card);
-  });
-
-  container.addEventListener('click', (e) => {
-    const btn = e.target.closest('.copy-btn');
-    if (!btn) return;
-    const idx = Number(btn.dataset.index);
-    navigator.clipboard.writeText(items[idx].content).then(() => {
-      const original = btn.textContent;
+  function copyCard(id, btn) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
       btn.textContent = 'Copied';
       btn.classList.add('copied');
       setTimeout(() => {
-        btn.textContent = original;
+        btn.textContent = 'Copy';
         btn.classList.remove('copied');
       }, 1500);
     });
-  });
+  }
 </script>
 
 </body>
