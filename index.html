@@ -94,22 +94,32 @@
     word-break:break-all;
   }
 
-  .copy-btn{
-    width:100%;
-    margin-top:16px;
+  .btn-row{display:flex;gap:10px;margin-top:16px;}
+  .copy-btn, .open-btn{
+    flex:1;
     padding:13px;
     border-radius:10px;
     border:none;
-    background:var(--text-primary);
-    color:#0a0a10;
     font-size:15px;
     font-weight:600;
     font-family:var(--sans);
     cursor:pointer;
+    text-decoration:none;
+    text-align:center;
     transition:opacity 0.15s ease, transform 0.1s ease;
   }
-  .copy-btn:hover{opacity:0.9;}
-  .copy-btn:active{transform:scale(0.98);}
+  .copy-btn{
+    background:var(--text-primary);
+    color:#0a0a10;
+  }
+  .open-btn{
+    background:var(--accent-dim);
+    color:var(--accent-strong);
+    border:1px solid rgba(139,124,246,0.25);
+    display:block;
+  }
+  .copy-btn:hover, .open-btn:hover{opacity:0.9;}
+  .copy-btn:active, .open-btn:active{transform:scale(0.98);}
   .copy-btn.copied{background:#28c840;color:#04340f;}
 
   .footer{
@@ -128,7 +138,7 @@
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
     </div>
     <h1>Shared items</h1>
-    <p>Everything below is kept current. Tap copy to grab what you need.</p>
+    <p>Everything below is kept current.</p>
   </div>
 
   <div id="cards"></div>
@@ -137,19 +147,34 @@
 </div>
 
 <script>
-  // Edit this array to change what's shown. Each item becomes one card.
+  // Edit this array. Each object is ONE independent card.
+  //
+  // For a piece of text, a note, or a quote — use "type: text" and put
+  // the text in "content". Shows a Copy button.
+  //
+  // For a link — use "type: link" and put the destination in "url".
+  // Shows an Open button that goes straight to that url.
+  //
+  // If a link ever breaks, do NOT delete the card — just change that
+  // one card's "url" to point at updated.html with the new destination
+  // built into the link, like this:
+  //   url: "updated.html?to=" + encodeURIComponent("https://new-real-site.com") + "&name=" + encodeURIComponent("Cool resource")
+  // Only that one card changes. Every other card is untouched.
+
   const items = [
     {
+      type: "text",
       tag: "Item 01",
       title: "Example note",
-      windowLabel: "clipboard.txt",
-      content: "Replace this with your first real note, quote, link, or snippet."
+      windowLabel: "note.txt",
+      content: "Replace this with your first real note, quote, or snippet."
     },
     {
+      type: "link",
       tag: "Item 02",
-      title: "Second example",
-      windowLabel: "clipboard.txt",
-      content: "Add as many cards as you like by adding more entries to the items array above."
+      title: "Example link",
+      windowLabel: "link.txt",
+      url: "https://example.com"
     }
   ];
 
@@ -158,18 +183,35 @@
   items.forEach((item, i) => {
     const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `
-      <span class="tag">${item.tag}</span>
-      <h2>${item.title}</h2>
-      <div class="terminal">
-        <div class="bar">
-          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="label">${item.windowLabel}</span>
+
+    if (item.type === "link") {
+      card.innerHTML = `
+        <span class="tag">${item.tag}</span>
+        <h2>${item.title}</h2>
+        <div class="terminal">
+          <div class="bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="label">${item.windowLabel}</span>
+          </div>
+          <div class="body">${item.url}</div>
         </div>
-        <div class="body">${item.content}</div>
-      </div>
-      <button class="copy-btn" data-index="${i}">Copy</button>
-    `;
+        <a class="open-btn" href="${item.url}" target="_blank" rel="noopener">Open link</a>
+      `;
+    } else {
+      card.innerHTML = `
+        <span class="tag">${item.tag}</span>
+        <h2>${item.title}</h2>
+        <div class="terminal">
+          <div class="bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="label">${item.windowLabel}</span>
+          </div>
+          <div class="body">${item.content}</div>
+        </div>
+        <button class="copy-btn" data-index="${i}">Copy</button>
+      `;
+    }
+
     container.appendChild(card);
   });
 
@@ -191,18 +233,3 @@
 
 </body>
 </html>
-
-const items = [
-  {
-    tag: "Item 01",
-    title: "Example note",
-    windowLabel: "clipboard.txt",
-    content: "Replace this with your first real note, quote, link, or snippet."
-  },
-  {
-    tag: "Item 02",
-    title: "Second example",
-    windowLabel: "clipboard.txt",
-    content: "Add as many cards as you like by adding more entries to the items array above."
-  }
-];
