@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Updated</title>
+<title>Vault</title>
 <style>
   :root{
     --bg: #0a0a10;
     --bg-glow: #1b1533;
     --card: #15141d;
+    --card-2: #0e0d13;
     --border: rgba(255,255,255,0.08);
     --border-strong: rgba(255,255,255,0.14);
     --text-primary: #eeeef4;
@@ -17,7 +18,8 @@
     --accent: #8b7cf6;
     --accent-strong: #a996ff;
     --accent-dim: rgba(139,124,246,0.12);
-    --radius: 20px;
+    --radius: 16px;
+    --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
   }
   *{box-sizing:border-box;}
@@ -25,75 +27,204 @@
     margin:0;
     font-family:var(--sans);
     background:
-      radial-gradient(600px 500px at 50% 30%, var(--bg-glow), transparent 70%),
+      radial-gradient(600px 400px at 50% -100px, var(--bg-glow), transparent 70%),
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
       var(--bg);
+    background-size: auto, 32px 32px, 32px 32px, auto;
     color:var(--text-primary);
     min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
+    padding:48px 20px 80px;
   }
+  .wrap{max-width:640px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:48px;}
+  .header .icon{
+    width:52px;height:52px;border-radius:12px;
+    background:var(--accent-dim);
+    border:1px solid var(--border-strong);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 20px;
+    color:var(--accent-strong);
+  }
+  .header h1{font-size:26px;font-weight:600;margin:0 0 10px;letter-spacing:-0.01em;}
+  .header p{font-size:15px;color:var(--text-secondary);margin:0;line-height:1.5;}
+
   .card{
-    max-width:440px;
-    width:100%;
     background:var(--card);
     border:1px solid var(--border);
     border-radius:var(--radius);
-    padding:40px 32px;
-    text-align:center;
+    padding:28px;
+    margin-bottom:20px;
   }
-  .badge{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:13px;
+  .card .tag{
+    display:inline-block;
+    font-size:12px;
+    font-family:var(--mono);
     color:var(--accent-strong);
     background:var(--accent-dim);
     border:1px solid rgba(139,124,246,0.25);
-    padding:6px 16px;
+    padding:4px 12px;
     border-radius:999px;
-    margin-bottom:24px;
-  }
-  .badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent-strong);}
-  h1{font-size:28px;font-weight:600;margin:0 0 16px;letter-spacing:-0.01em;}
-  p{font-size:15px;color:var(--text-secondary);line-height:1.6;margin:0 0 28px;}
-  a.btn{
-    display:block;
-    padding:14px;
-    border-radius:12px;
-    background:var(--text-primary);
-    color:#0a0a10;
-    font-weight:600;
-    font-size:15px;
-    text-decoration:none;
     margin-bottom:16px;
   }
-  a.btn:hover{opacity:0.9;}
-  .hint{font-size:13px;color:var(--text-muted);margin:0;}
+  .card h2{font-size:19px;font-weight:600;margin:0 0 16px;}
+
+  .terminal{
+    background:var(--card-2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .terminal .bar{
+    display:flex;align-items:center;gap:7px;
+    padding:11px 14px;
+    border-bottom:1px solid var(--border);
+  }
+  .terminal .dot{width:10px;height:10px;border-radius:50%;}
+  .terminal .dot.r{background:#ff5f57;}
+  .terminal .dot.y{background:#febc2e;}
+  .terminal .dot.g{background:#28c840;}
+  .terminal .bar .label{
+    margin-left:8px;font-size:12px;color:var(--text-muted);font-family:var(--mono);
+  }
+  .terminal .body{
+    padding:18px 16px;
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.6;
+    color:#c9c7db;
+    white-space:pre-wrap;
+    word-break:break-all;
+  }
+
+  .btn-row{display:flex;gap:10px;margin-top:16px;}
+  .copy-btn, .open-btn{
+    flex:1;
+    padding:13px;
+    border-radius:10px;
+    border:none;
+    font-size:15px;
+    font-weight:600;
+    font-family:var(--sans);
+    cursor:pointer;
+    text-decoration:none;
+    text-align:center;
+    transition:opacity 0.15s ease, transform 0.1s ease;
+  }
+  .copy-btn{
+    background:var(--text-primary);
+    color:#0a0a10;
+  }
+  .open-btn{
+    background:var(--accent-dim);
+    color:var(--accent-strong);
+    border:1px solid rgba(139,124,246,0.25);
+    display:block;
+  }
+  .copy-btn:hover, .open-btn:hover{opacity:0.9;}
+  .copy-btn:active, .open-btn:active{transform:scale(0.98);}
+  .copy-btn.copied{background:#28c840;color:#04340f;}
+
+  .footer{
+    text-align:center;
+    margin-top:36px;
+    font-size:13px;
+    color:var(--text-muted);
+  }
 </style>
 </head>
 <body>
-  <div class="card">
-    <span class="badge"><span class="pulse"></span>Update available</span>
-    <h1 id="title">Script updated</h1>
-    <p id="desc">A new version is out and this link is now out of date. Use the current link below — it always points to the latest version.</p>
-    <a class="btn" id="go-btn" href="../NEW/">Open new link</a>
-    <p class="hint">This link is refreshed regularly. Bookmark it instead.</p>
+<div class="wrap">
+
+  <div class="header">
+    <div class="icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+    </div>
+    <h1>Shared items</h1>
+    <p>Everything below is kept current.</p>
   </div>
 
+  <div id="cards"></div>
+
+  <div class="footer">Works on every device · Copy &amp; paste</div>
+</div>
+
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const destination = params.get("to");
-  const name = params.get("name");
+  // Edit this array. Each object is ONE independent card.
+  //
+  // For a piece of text, a note, or a quote — use "type: text" and put
+  // the text in "content". Shows a Copy button.
+  //
+  // For a link — use "type: link" and put the destination in "url".
+  // Shows an Open button that goes straight to that url.
+  //
+  // If a link ever breaks, do NOT delete the card — just change that
+  // one card's "url" to point at updated.html with the new destination
+  // built into the link, like this:
+  //   url: "updated.html?to=" + encodeURIComponent("https://new-real-site.com") + "&name=" + encodeURIComponent("Cool resource")
+  // Only that one card changes. Every other card is untouched.
 
-  const btn = document.getElementById("go-btn");
-  const title = document.getElementById("title");
-
-  if (destination) {
-    btn.href = destination;
-    if (name) {
-      title.textContent = name + " updated";
+  const items = [
+    {
+      type: "text",
+      tag: "Keyless",
+      title: "Updated Script",
+      windowLabel: "script.txt",
+      content: "loadstring(game:HttpGet("https://pastebin.com/raw/8ysy7ENG",true))()"
     }
-  }
+  ];
+
+  const container = document.getElementById('cards');
+
+  items.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    if (item.type === "link") {
+      card.innerHTML = `
+        <span class="tag">${item.tag}</span>
+        <h2>${item.title}</h2>
+        <div class="terminal">
+          <div class="bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="label">${item.windowLabel}</span>
+          </div>
+          <div class="body">${item.url}</div>
+        </div>
+        <a class="open-btn" href="${item.url}" target="_blank" rel="noopener">Open link</a>
+      `;
+    } else {
+      card.innerHTML = `
+        <span class="tag">${item.tag}</span>
+        <h2>${item.title}</h2>
+        <div class="terminal">
+          <div class="bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="label">${item.windowLabel}</span>
+          </div>
+          <div class="body">${item.content}</div>
+        </div>
+        <button class="copy-btn" data-index="${i}">Copy</button>
+      `;
+    }
+
+    container.appendChild(card);
+  });
+
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    const idx = Number(btn.dataset.index);
+    navigator.clipboard.writeText(items[idx].content).then(() => {
+      const original = btn.textContent;
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  });
 </script>
 
 </body>
